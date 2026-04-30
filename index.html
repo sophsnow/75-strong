@@ -12,714 +12,141 @@
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blush: #e8c4b8;
-    --clay: #c47b5a;
-    --cream: #fdf6f0;
-    --warm-white: #faf7f4;
-    --deep: #2c1a12;
-    --moss: #7a8c6e;
-    --soft-moss: #b8c9a8;
-    --muted: #9b8880;
-    --gold: #c9a96e;
-    --border: #e8ddd6;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--cream);
-    color: var(--deep);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-  }
-
-  /* SCREENS */
-  .screen { display: none; flex-direction: column; min-height: 100vh; }
-  .screen.active { display: flex; }
-
-  /* ── WELCOME ── */
-  #welcome {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 48px 28px;
-    background: radial-gradient(ellipse at 30% 20%, #f0d5c8 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 80%, #d4e0cc 0%, transparent 45%),
-                var(--cream);
-  }
-
-  .badge {
-    display: inline-block;
-    font-size: 10px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--clay);
-    font-weight: 500;
-    margin-bottom: 20px;
-    background: rgba(196,123,90,0.1);
-    padding: 6px 16px;
-    border-radius: 20px;
-  }
-
-  #welcome h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(52px, 14vw, 96px);
-    line-height: 0.9;
-    margin-bottom: 6px;
-  }
-
-  #welcome h1 em {
-    font-style: italic;
-    color: var(--clay);
-    display: block;
-  }
-
-  #welcome p {
-    font-size: 15px;
-    color: var(--muted);
-    line-height: 1.8;
-    max-width: 320px;
-    margin: 20px auto 40px;
-  }
-
-  .btn-primary {
-    background: var(--deep);
-    color: var(--cream);
-    border: none;
-    padding: 16px 40px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    border-radius: 40px;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.15s;
-  }
-  .btn-primary:hover { background: var(--clay); transform: scale(1.02); }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--muted);
-    border: 1px solid var(--border);
-    padding: 12px 28px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    letter-spacing: 1px;
-    border-radius: 40px;
-    cursor: pointer;
-    margin-top: 12px;
-    transition: border-color 0.2s, color 0.2s;
-  }
-  .btn-ghost:hover { border-color: var(--clay); color: var(--clay); }
-
-  /* ── SETUP ── */
-  #setup {
-    padding: 56px 28px 40px;
-    background: var(--warm-white);
-  }
-
-  .setup-header {
-    margin-bottom: 40px;
-  }
-
-  .setup-header .back-btn {
-    font-size: 12px;
-    color: var(--muted);
-    cursor: pointer;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    background: none;
-    border: none;
-    font-family: 'DM Sans', sans-serif;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 0;
-  }
-
-  .setup-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 32px;
-    margin-bottom: 6px;
-  }
-
-  .setup-header p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-  }
-
-  .field-group {
-    margin-bottom: 28px;
-  }
-
-  .field-label {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--clay);
-    font-weight: 500;
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .field-input {
-    width: 100%;
-    padding: 14px 16px;
-    background: white;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--deep);
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .field-input:focus { border-color: var(--clay); }
-
-  .phase-options {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .phase-option {
-    padding: 14px 12px;
-    border: 1.5px solid var(--border);
-    border-radius: 10px;
-    cursor: pointer;
-    text-align: center;
-    transition: all 0.2s;
-    background: white;
-  }
-
-  .phase-option.selected {
-    border-color: var(--clay);
-    background: rgba(196,123,90,0.08);
-  }
-
-  .phase-option .phase-name {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--deep);
-    margin-bottom: 2px;
-  }
-
-  .phase-option .phase-days {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  /* ── TRACKER ── */
-  #tracker {
-    background: var(--cream);
-    flex: 1;
-  }
-
-  .tracker-header {
-    background: var(--deep);
-    padding: 48px 28px 28px;
-    color: var(--cream);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .tracker-header::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    background: rgba(232,196,184,0.08);
-  }
-
-  .tracker-header::after {
-    content: '';
-    position: absolute;
-    bottom: -20px; left: 40px;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    background: rgba(184,201,168,0.1);
-  }
-
-  .header-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 24px;
-  }
-
-  .program-name {
-    font-size: 10px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--blush);
-    margin-bottom: 6px;
-    font-weight: 500;
-  }
-
-  .day-display {
-    font-family: 'Playfair Display', serif;
-    font-size: 48px;
-    line-height: 1;
-    color: white;
-  }
-
-  .day-display em {
-    font-style: italic;
-    color: var(--blush);
-  }
-
-  .date-display {
-    font-size: 13px;
-    color: rgba(253,246,240,0.5);
-    margin-top: 4px;
-  }
-
-  .phase-badge {
-    background: rgba(184,201,168,0.2);
-    color: var(--soft-moss);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-
-  /* Progress ring */
-  .progress-ring-wrap {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-top: 4px;
-  }
-
-  .ring-container {
-    position: relative;
-    width: 52px;
-    height: 52px;
-    flex-shrink: 0;
-  }
-
-  .ring-container svg {
-    transform: rotate(-90deg);
-  }
-
-  .ring-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 500;
-    color: white;
-  }
-
-  .overall-progress {
-    flex: 1;
-  }
-
-  .progress-meta {
-    font-size: 12px;
-    color: rgba(253,246,240,0.5);
-    margin-bottom: 6px;
-  }
-
-  .day-bar-wrap {
-    height: 3px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 2px;
-    overflow: hidden;
-  }
-
-  .day-bar-fill {
-    height: 100%;
-    background: linear-gradient(to right, var(--clay), var(--gold));
-    border-radius: 2px;
-    transition: width 0.6s ease;
-  }
-
-  /* CHECKLIST */
-  .checklist-wrap {
-    padding: 24px 20px 32px;
-  }
-
-  .section-divider {
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--muted);
-    font-weight: 500;
-    padding: 0 8px;
-    margin-bottom: 8px;
-    margin-top: 20px;
-  }
-
-  .check-card {
-    background: white;
-    border-radius: 14px;
-    overflow: hidden;
-    margin-bottom: 2px;
-    border: 1px solid var(--border);
-  }
-
-  .check-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 16px 18px;
-    cursor: pointer;
-    transition: background 0.15s;
-    border-bottom: 1px solid #f2ebe4;
-    position: relative;
-  }
-
-  .check-item:last-child { border-bottom: none; }
-  .check-item:active { background: #faf3ee; }
-
-  .check-box {
-    width: 24px;
-    height: 24px;
-    border: 1.5px solid #ddd0c8;
-    border-radius: 6px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    background: white;
-  }
-
-  .check-item.done .check-box {
-    background: var(--clay);
-    border-color: var(--clay);
-  }
-
-  .check-item.done .check-box::after {
-    content: '✓';
-    color: white;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
-  .check-item.done .check-label {
-    opacity: 0.38;
-  }
-
-  .check-label {
-    flex: 1;
-    transition: opacity 0.2s;
-  }
-
-  .check-title {
-    font-size: 15px;
-    font-weight: 400;
-    color: var(--deep);
-    line-height: 1.3;
-  }
-
-  .check-sub {
-    font-size: 12px;
-    color: var(--muted);
-    margin-top: 2px;
-    font-weight: 300;
-  }
-
-  .check-tag {
-    font-size: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--moss);
-    background: rgba(122,140,110,0.1);
-    padding: 3px 8px;
-    border-radius: 8px;
-    flex-shrink: 0;
-    font-weight: 500;
-  }
-
-  /* CYCLE LOG */
-  .cycle-log-wrap {
-    margin: 0 20px 20px;
-    background: linear-gradient(135deg, #e8edd8, #d4e0cc);
-    border-radius: 16px;
-    padding: 22px 20px;
-  }
-
-  .cycle-log-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: var(--deep);
-    margin-bottom: 16px;
-  }
-
-  .cycle-row {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 12px;
-  }
-
-  .cycle-chip {
-    padding: 8px 14px;
-    border-radius: 20px;
-    border: 1.5px solid rgba(122,140,110,0.3);
-    font-size: 13px;
-    cursor: pointer;
-    background: rgba(255,255,255,0.5);
-    color: var(--deep);
-    transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .cycle-chip.selected {
-    background: var(--moss);
-    border-color: var(--moss);
-    color: white;
-  }
-
-  .cycle-section-label {
-    font-size: 10px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--moss);
-    font-weight: 500;
-    margin-bottom: 8px;
-  }
-
-  .cycle-notes {
-    width: 100%;
-    padding: 12px 14px;
-    background: rgba(255,255,255,0.6);
-    border: 1px solid rgba(122,140,110,0.2);
-    border-radius: 10px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    color: var(--deep);
-    resize: none;
-    outline: none;
-    height: 72px;
-    margin-top: 4px;
-  }
-
-  /* STREAK */
-  .streak-bar {
-    margin: 0 20px 24px;
-    background: white;
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-
-  .streak-dots {
-    display: flex;
-    gap: 4px;
-    flex: 1;
-    flex-wrap: wrap;
-  }
-
-  .streak-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--border);
-    transition: background 0.3s;
-  }
-
-  .streak-dot.filled { background: var(--clay); }
-  .streak-dot.today { background: var(--gold); box-shadow: 0 0 0 2px rgba(201,169,110,0.3); }
-
-  .streak-info {
-    text-align: right;
-    flex-shrink: 0;
-  }
-
-  .streak-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    color: var(--deep);
-    line-height: 1;
-  }
-
-  .streak-label {
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  /* NAV */
-  .bottom-nav {
-    position: sticky;
-    bottom: 0;
-    background: white;
-    border-top: 1px solid var(--border);
-    display: flex;
-    padding: 12px 20px 20px;
-    gap: 8px;
-    z-index: 10;
-  }
-
-  .nav-btn {
-    flex: 1;
-    padding: 13px;
-    border: none;
-    border-radius: 12px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 500;
-  }
-
-  .nav-complete {
-    background: var(--deep);
-    color: white;
-  }
-
-  .nav-complete:hover { background: var(--clay); }
-  .nav-complete:disabled { opacity: 0.3; cursor: not-allowed; }
-
-  .nav-info {
-    background: var(--border);
-    color: var(--muted);
-  }
-
-  .nav-info:hover { background: #ddd0c8; color: var(--deep); }
-
-  /* COMPLETE OVERLAY */
-  .complete-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(44,26,18,0.85);
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    padding: 32px;
-  }
-
-  .complete-overlay.show { display: flex; }
-
-  .complete-card {
-    background: var(--cream);
-    border-radius: 24px;
-    padding: 48px 36px;
-    text-align: center;
-    max-width: 340px;
-    width: 100%;
-  }
-
-  .complete-card .big-check {
-    width: 72px;
-    height: 72px;
-    background: var(--clay);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 24px;
-    font-size: 32px;
-    color: white;
-  }
-
-  .complete-card h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    margin-bottom: 8px;
-  }
-
-  .complete-card p {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.7;
-    margin-bottom: 32px;
-  }
-
-  /* INFO DRAWER */
-  .info-drawer {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-  }
-
-  .info-drawer.show { display: flex; flex-direction: column; }
-
-  .drawer-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(44,26,18,0.4);
-  }
-
-  .drawer-sheet {
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    background: var(--cream);
-    border-radius: 24px 24px 0 0;
-    padding: 28px 24px 48px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-
-  .drawer-handle {
-    width: 40px;
-    height: 4px;
-    background: var(--border);
-    border-radius: 2px;
-    margin: 0 auto 24px;
-  }
-
-  .drawer-sheet h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-
-  .info-rule {
-    padding: 16px 0;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .info-rule:last-child { border-bottom: none; }
-
-  .info-rule-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--deep);
-    margin-bottom: 6px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .info-rule-body {
-    font-size: 13px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-
-  /* FADE */
-  .fade-in { animation: fadeUp 0.5s ease both; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+:root{--blush:#e8c4b8;--clay:#c47b5a;--cream:#fdf6f0;--warm-white:#faf7f4;--deep:#2c1a12;--moss:#7a8c6e;--soft-moss:#b8c9a8;--muted:#9b8880;--gold:#c9a96e;--border:#e8ddd6;}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;font-weight:300;min-height:100vh;display:flex;flex-direction:column;}
+.screen{display:none;flex-direction:column;min-height:100vh;}.screen.active{display:flex;}
+#welcome{justify-content:center;align-items:center;text-align:center;padding:48px 28px;background:radial-gradient(ellipse at 30% 20%,#f0d5c8 0%,transparent 55%),radial-gradient(ellipse at 80% 80%,#d4e0cc 0%,transparent 45%),var(--cream);}
+.badge{display:inline-block;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--clay);font-weight:500;margin-bottom:20px;background:rgba(196,123,90,0.1);padding:6px 16px;border-radius:20px;}
+#welcome h1{font-family:'Playfair Display',serif;font-size:clamp(52px,14vw,96px);line-height:0.9;margin-bottom:6px;}
+#welcome h1 em{font-style:italic;color:var(--clay);display:block;}
+#welcome p{font-size:15px;color:var(--muted);line-height:1.8;max-width:320px;margin:20px auto 40px;}
+.btn-primary{background:var(--deep);color:var(--cream);border:none;padding:16px 40px;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;border-radius:40px;cursor:pointer;transition:background 0.2s,transform 0.15s;}
+.btn-primary:hover{background:var(--clay);transform:scale(1.02);}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:12px;letter-spacing:1px;border-radius:40px;cursor:pointer;margin-top:12px;transition:border-color 0.2s,color 0.2s;}
+.btn-ghost:hover{border-color:var(--clay);color:var(--clay);}
+#setup{padding:56px 28px 40px;background:var(--warm-white);}
+.field-group{margin-bottom:28px;}
+.field-label{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--clay);font-weight:500;margin-bottom:10px;display:block;}
+.field-input{width:100%;padding:14px 16px;background:white;border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--deep);outline:none;transition:border-color 0.2s;}
+.field-input:focus{border-color:var(--clay);}
+.phase-options{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.phase-option{padding:14px 12px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;text-align:center;transition:all 0.2s;background:white;}
+.phase-option.selected{border-color:var(--clay);background:rgba(196,123,90,0.08);}
+.phase-option .phase-name{font-size:14px;font-weight:500;color:var(--deep);margin-bottom:2px;}
+.phase-option .phase-days{font-size:11px;color:var(--muted);}
+#tracker{background:var(--cream);flex:1;}
+.tracker-header{background:var(--deep);padding:52px 28px 24px;color:var(--cream);position:relative;overflow:hidden;}
+.tracker-header::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(232,196,184,0.08);}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;}
+.program-name{font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--blush);margin-bottom:6px;font-weight:500;}
+.day-display{font-family:'Playfair Display',serif;font-size:48px;line-height:1;color:white;}
+.day-display em{font-style:italic;color:var(--blush);}
+.date-display{font-size:13px;color:rgba(253,246,240,0.5);margin-top:4px;}
+.phase-badge{background:rgba(184,201,168,0.2);color:var(--soft-moss);font-size:11px;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:20px;font-weight:500;}
+.progress-ring-wrap{display:flex;align-items:center;gap:16px;margin-top:4px;}
+.ring-container{position:relative;width:52px;height:52px;flex-shrink:0;}
+.ring-container svg{transform:rotate(-90deg);}
+.ring-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:white;}
+.overall-progress{flex:1;}
+.progress-meta{font-size:12px;color:rgba(253,246,240,0.5);margin-bottom:6px;}
+.day-bar-wrap{height:3px;background:rgba(255,255,255,0.15);border-radius:2px;overflow:hidden;}
+.day-bar-fill{height:100%;background:linear-gradient(to right,var(--clay),var(--gold));border-radius:2px;transition:width 0.6s ease;}
+.bottom-nav{position:sticky;bottom:0;background:white;border-top:1px solid var(--border);display:flex;padding:10px 16px 20px;gap:6px;z-index:10;}
+.nav-btn{flex:1;padding:12px 8px;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;font-weight:500;}
+.nav-complete{background:var(--deep);color:white;flex:2;}
+.nav-complete:hover{background:var(--clay);}
+.nav-secondary{background:var(--border);color:var(--muted);}
+.nav-secondary:hover,.nav-secondary.active{background:var(--deep);color:white;}
+.tab-content{display:none;}.tab-content.active{display:block;}
+.checklist-wrap{padding:20px 20px 8px;}
+.section-divider{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:500;padding:0 8px;margin-bottom:8px;margin-top:20px;}
+.check-card{background:white;border-radius:14px;overflow:hidden;margin-bottom:2px;border:1px solid var(--border);}
+.check-item{display:flex;align-items:center;gap:14px;padding:16px 18px;cursor:pointer;transition:background 0.15s;border-bottom:1px solid #f2ebe4;position:relative;}
+.check-item:last-child{border-bottom:none;}
+.check-item:active{background:#faf3ee;}
+.check-box{width:24px;height:24px;border:1.5px solid #ddd0c8;border-radius:6px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;background:white;}
+.check-item.done .check-box{background:var(--clay);border-color:var(--clay);}
+.check-item.done .check-box::after{content:'✓';color:white;font-size:13px;font-weight:600;}
+.check-item.done .check-label{opacity:0.38;}
+.check-label{flex:1;transition:opacity 0.2s;}
+.check-title{font-size:15px;font-weight:400;color:var(--deep);line-height:1.3;}
+.check-sub{font-size:12px;color:var(--muted);margin-top:2px;font-weight:300;}
+.check-tag{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--moss);background:rgba(122,140,110,0.1);padding:3px 8px;border-radius:8px;flex-shrink:0;font-weight:500;}
+.cycle-log-wrap{margin:8px 20px 20px;background:linear-gradient(135deg,#e8edd8,#d4e0cc);border-radius:16px;padding:22px 20px;}
+.cycle-log-title{font-family:'Playfair Display',serif;font-size:18px;color:var(--deep);margin-bottom:16px;}
+.cycle-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.cycle-chip{padding:8px 14px;border-radius:20px;border:1.5px solid rgba(122,140,110,0.3);font-size:13px;cursor:pointer;background:rgba(255,255,255,0.5);color:var(--deep);transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.cycle-chip.selected{background:var(--moss);border-color:var(--moss);color:white;}
+.cycle-section-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--moss);font-weight:500;margin-bottom:8px;}
+.cycle-notes{width:100%;padding:12px 14px;background:rgba(255,255,255,0.6);border:1px solid rgba(122,140,110,0.2);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--deep);resize:none;outline:none;height:72px;margin-top:4px;}
+.streak-bar{margin:16px 20px 4px;background:white;border-radius:14px;border:1px solid var(--border);padding:16px 20px;display:flex;align-items:center;gap:16px;}
+.streak-dots{display:flex;gap:4px;flex:1;flex-wrap:wrap;}
+.streak-dot{width:10px;height:10px;border-radius:50%;background:var(--border);transition:background 0.3s;}
+.streak-dot.filled{background:var(--clay);}
+.streak-dot.today{background:var(--gold);box-shadow:0 0 0 2px rgba(201,169,110,0.3);}
+.streak-info{text-align:right;flex-shrink:0;}
+.streak-num{font-family:'Playfair Display',serif;font-size:28px;color:var(--deep);line-height:1;}
+.streak-label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+.calendar-wrap{padding:20px;}
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.cal-title{font-family:'Playfair Display',serif;font-size:22px;}
+.cal-nav{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 14px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--muted);transition:all 0.2s;}
+.cal-nav:hover{border-color:var(--clay);color:var(--clay);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-day-label{text-align:center;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);padding:4px 0 8px;}
+.cal-cell{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;position:relative;border:1.5px solid transparent;}
+.cal-cell:active{transform:scale(0.92);}
+.cal-cell.empty,.cal-cell.future{cursor:default;opacity:0.3;}
+.cal-cell.completed{background:rgba(196,123,90,0.12);border-color:var(--clay);}
+.cal-cell.today-cell{border-color:var(--gold);background:rgba(201,169,110,0.1);}
+.cal-cell.viewing{background:var(--deep);}
+.cal-cell-num{font-size:13px;font-weight:400;color:var(--deep);line-height:1;}
+.cal-cell.completed .cal-cell-num{color:var(--clay);font-weight:500;}
+.cal-cell.viewing .cal-cell-num{color:white;}
+.cal-cell.future .cal-cell-num{color:var(--muted);}
+.cal-cell-dot{width:4px;height:4px;border-radius:50%;background:var(--clay);margin-top:3px;}
+.cal-cell.viewing .cal-cell-dot{background:var(--blush);}
+.cal-legend{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap;}
+.cal-legend-item{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);}
+.cal-legend-dot{width:10px;height:10px;border-radius:3px;}
+.day-detail{margin-top:20px;background:white;border-radius:16px;border:1px solid var(--border);overflow:hidden;}
+.day-detail-header{background:var(--deep);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;}
+.day-detail-title{font-family:'Playfair Display',serif;font-size:20px;color:white;}
+.day-detail-date{font-size:12px;color:rgba(253,246,240,0.5);margin-top:2px;}
+.day-detail-edit{background:rgba(255,255,255,0.15);border:none;color:white;padding:6px 14px;border-radius:20px;font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:1px;cursor:pointer;text-transform:uppercase;transition:background 0.2s;}
+.day-detail-edit:hover{background:rgba(255,255,255,0.25);}
+.detail-check-row{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid #f2ebe4;}
+.detail-check-row:last-child{border-bottom:none;}
+.detail-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;}
+.detail-dot.done{background:var(--clay);}
+.detail-check-name{font-size:14px;color:var(--deep);}
+.detail-check-name.done{opacity:0.4;text-decoration:line-through;}
+.no-data{padding:32px 20px;text-align:center;color:var(--muted);font-size:14px;line-height:1.6;}
+.overlay{display:none;position:fixed;inset:0;z-index:100;}.overlay.show{display:flex;}
+#completeOverlay{justify-content:center;align-items:center;padding:32px;background:rgba(44,26,18,0.85);}
+.complete-card{background:var(--cream);border-radius:24px;padding:48px 36px;text-align:center;max-width:340px;width:100%;}
+.big-check{width:72px;height:72px;background:var(--clay);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;color:white;}
+.complete-card h3{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:8px;}
+.complete-card p{font-size:14px;color:var(--muted);line-height:1.7;margin-bottom:32px;}
+#infoDrawer{flex-direction:column;}
+.drawer-backdrop{position:absolute;inset:0;background:rgba(44,26,18,0.4);}
+.drawer-sheet{position:absolute;bottom:0;left:0;right:0;background:var(--cream);border-radius:24px 24px 0 0;padding:20px 24px 48px;max-height:82vh;overflow-y:auto;}
+.drawer-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;}
+.drawer-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.drawer-top h3{font-family:'Playfair Display',serif;font-size:24px;}
+.drawer-close{width:36px;height:36px;border-radius:50%;background:var(--border);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted);transition:background 0.2s;flex-shrink:0;}
+.drawer-close:hover{background:#ddd0c8;color:var(--deep);}
+.info-rule{padding:16px 0;border-bottom:1px solid var(--border);}
+.info-rule:last-child{border-bottom:none;}
+.info-rule-title{font-size:14px;font-weight:500;color:var(--deep);margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;}
+.info-rule-body{font-size:13px;color:var(--muted);line-height:1.7;}
+.fade-in{animation:fadeUp 0.5s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
 </style>
 </head>
 <body>
 
-<!-- ══ WELCOME ══ -->
 <div id="welcome" class="screen active">
   <div class="badge">75 Days · For Her</div>
   <h1>75 <em>Strong</em></h1>
@@ -728,50 +155,25 @@
   <button class="btn-ghost" onclick="loadExisting()">Continue where I left off</button>
 </div>
 
-<!-- ══ SETUP ══ -->
-<div id="setup" class="screen" style="padding: 56px 28px 40px; background: var(--warm-white);">
-  <button class="back-btn" onclick="goTo('welcome')" style="font-size:12px;color:var(--muted);cursor:pointer;letter-spacing:1px;text-transform:uppercase;background:none;border:none;font-family:'DM Sans',sans-serif;margin-bottom:24px;display:flex;align-items:center;gap:8px;padding:0;">← Back</button>
+<div id="setup" class="screen" style="padding:56px 28px 40px;background:var(--warm-white);">
+  <button onclick="goTo('welcome')" style="font-size:12px;color:var(--muted);cursor:pointer;letter-spacing:1px;text-transform:uppercase;background:none;border:none;font-family:'DM Sans',sans-serif;margin-bottom:24px;display:flex;align-items:center;gap:8px;padding:0;">← Back</button>
   <h2 style="font-family:'Playfair Display',serif;font-size:32px;margin-bottom:6px;">Set up your 75</h2>
-  <p style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:36px;">Takes 30 seconds. Just the essentials.</p>
-
-  <div class="field-group">
-    <label class="field-label">Your name</label>
-    <input class="field-input" type="text" id="userName" placeholder="e.g. Sophia" />
-  </div>
-
-  <div class="field-group">
-    <label class="field-label">Start date</label>
-    <input class="field-input" type="date" id="startDate" />
-  </div>
-
+  <p style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:36px;">Takes 30 seconds.</p>
+  <div class="field-group"><label class="field-label">Your name</label><input class="field-input" type="text" id="userName" placeholder="e.g. Sophia"/></div>
+  <div class="field-group"><label class="field-label">Start date</label><input class="field-input" type="date" id="startDate"/></div>
   <div class="field-group">
     <label class="field-label">Current cycle phase</label>
-    <div class="phase-options" id="phaseOptions">
-      <div class="phase-option" onclick="selectPhase(this, 'Menstrual')">
-        <div class="phase-name">Menstrual</div>
-        <div class="phase-days">Days 1–5</div>
-      </div>
-      <div class="phase-option" onclick="selectPhase(this, 'Follicular')">
-        <div class="phase-name">Follicular</div>
-        <div class="phase-days">Days 6–13</div>
-      </div>
-      <div class="phase-option" onclick="selectPhase(this, 'Ovulation')">
-        <div class="phase-name">Ovulation</div>
-        <div class="phase-days">Days 14–16</div>
-      </div>
-      <div class="phase-option" onclick="selectPhase(this, 'Luteal')">
-        <div class="phase-name">Luteal</div>
-        <div class="phase-days">Days 17–28</div>
-      </div>
+    <div class="phase-options">
+      <div class="phase-option" onclick="selectPhase(this,'Menstrual')"><div class="phase-name">Menstrual</div><div class="phase-days">Days 1–5</div></div>
+      <div class="phase-option" onclick="selectPhase(this,'Follicular')"><div class="phase-name">Follicular</div><div class="phase-days">Days 6–13</div></div>
+      <div class="phase-option" onclick="selectPhase(this,'Ovulation')"><div class="phase-name">Ovulation</div><div class="phase-days">Days 14–16</div></div>
+      <div class="phase-option" onclick="selectPhase(this,'Luteal')"><div class="phase-name">Luteal</div><div class="phase-days">Days 17–28</div></div>
     </div>
   </div>
-
   <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="startProgram()">Start 75 Strong</button>
 </div>
 
-<!-- ══ TRACKER ══ -->
 <div id="tracker" class="screen">
-
   <div class="tracker-header">
     <div class="header-top">
       <div>
@@ -781,150 +183,96 @@
       </div>
       <div class="phase-badge" id="phaseBadge">Follicular</div>
     </div>
-
     <div class="progress-ring-wrap">
       <div class="ring-container">
         <svg width="52" height="52" viewBox="0 0 52 52">
           <circle cx="26" cy="26" r="21" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
-          <circle cx="26" cy="26" r="21" fill="none" stroke="var(--clay)" stroke-width="4"
-            stroke-dasharray="132" stroke-dashoffset="132" stroke-linecap="round"
-            id="dayRing" style="transition: stroke-dashoffset 0.6s ease;"/>
+          <circle cx="26" cy="26" r="21" fill="none" stroke="var(--clay)" stroke-width="4" stroke-dasharray="132" stroke-dashoffset="132" stroke-linecap="round" id="dayRing" style="transition:stroke-dashoffset 0.6s ease;"/>
         </svg>
         <div class="ring-text" id="ringPct">0%</div>
       </div>
       <div class="overall-progress">
         <div class="progress-meta">Day <span id="dayProgress">1</span> of 75</div>
-        <div class="day-bar-wrap">
-          <div class="day-bar-fill" id="dayBarFill"></div>
-        </div>
+        <div class="day-bar-wrap"><div class="day-bar-fill" id="dayBarFill"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- STREAK -->
-  <div style="padding: 20px 20px 0;">
-    <div class="streak-bar">
-      <div class="streak-dots" id="streakDots"></div>
-      <div class="streak-info">
-        <div class="streak-num" id="streakNum">0</div>
-        <div class="streak-label">day streak</div>
+  <div id="tabToday" class="tab-content active">
+    <div style="padding:16px 20px 0;">
+      <div class="streak-bar">
+        <div class="streak-dots" id="streakDots"></div>
+        <div class="streak-info"><div class="streak-num" id="streakNum">0</div><div class="streak-label">day streak</div></div>
       </div>
+    </div>
+    <div class="checklist-wrap">
+      <div class="section-divider">Movement</div>
+      <div class="check-card">
+        <div class="check-item" onclick="toggle(this,0)"><div class="check-box"></div><div class="check-label"><div class="check-title">Workout session</div><div class="check-sub" id="workoutSub">45–60 min · matched to your phase</div></div><div class="check-tag">Phase</div></div>
+        <div class="check-item" onclick="toggle(this,1)"><div class="check-box"></div><div class="check-label"><div class="check-title">Outdoor walk</div><div class="check-sub">20–30 min · natural light</div></div></div>
+      </div>
+      <div class="section-divider">Nourishment</div>
+      <div class="check-card">
+        <div class="check-item" onclick="toggle(this,2)"><div class="check-box"></div><div class="check-label"><div class="check-title">3 whole-food meals</div><div class="check-sub">No skipping · protein + fat + complex carbs</div></div></div>
+        <div class="check-item" onclick="toggle(this,3)"><div class="check-box"></div><div class="check-label"><div class="check-title">3 litres of water</div><div class="check-sub">Herbal teas count · 1 coffee max before noon</div></div></div>
+        <div class="check-item" onclick="toggle(this,4)"><div class="check-box"></div><div class="check-label"><div class="check-title">No alcohol</div><div class="check-sub">Non-negotiable for 75 days</div></div></div>
+      </div>
+      <div class="section-divider">Mind & Recovery</div>
+      <div class="check-card">
+        <div class="check-item" onclick="toggle(this,5)"><div class="check-box"></div><div class="check-label"><div class="check-title">10 min stress practice</div><div class="check-sub">Breathwork · meditation · journaling</div></div><div class="check-tag" style="background:rgba(196,123,90,0.1);color:var(--clay);">Cortisol</div></div>
+        <div class="check-item" onclick="toggle(this,6)"><div class="check-box"></div><div class="check-label"><div class="check-title">10 pages read</div><div class="check-sub">Real book · no screens 30 min before bed</div></div></div>
+      </div>
+      <div class="section-divider">Cycle Tracking</div>
+      <div class="check-card">
+        <div class="check-item" onclick="toggle(this,7)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily cycle log</div><div class="check-sub">Energy · mood · discharge · symptoms</div></div><div class="check-tag" style="background:rgba(184,201,168,0.2);color:var(--moss);">Key</div></div>
+      </div>
+    </div>
+    <div class="cycle-log-wrap">
+      <div class="cycle-log-title">Today's cycle log</div>
+      <div class="cycle-section-label">Energy</div>
+      <div class="cycle-row">
+        <div class="cycle-chip" onclick="chipToggle(this,'energy')">Low</div>
+        <div class="cycle-chip" onclick="chipToggle(this,'energy')">Medium</div>
+        <div class="cycle-chip" onclick="chipToggle(this,'energy')">High</div>
+      </div>
+      <div class="cycle-section-label" style="margin-top:12px;">Mood</div>
+      <div class="cycle-row">
+        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Calm</div>
+        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Anxious</div>
+        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Motivated</div>
+        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Irritable</div>
+      </div>
+      <div class="cycle-section-label" style="margin-top:12px;">Notes</div>
+      <textarea class="cycle-notes" id="cycleNotes" placeholder="Discharge, symptoms, anything else…" oninput="saveNotes()"></textarea>
     </div>
   </div>
 
-  <!-- CHECKLIST -->
-  <div class="checklist-wrap">
-
-    <div class="section-divider">Movement</div>
-    <div class="check-card">
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">Workout session</div>
-          <div class="check-sub" id="workoutSub">45–60 min · matched to your phase</div>
-        </div>
-        <div class="check-tag">Phase</div>
+  <div id="tabCalendar" class="tab-content">
+    <div class="calendar-wrap">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="calPrev()">‹</button>
+        <div class="cal-title" id="calMonthTitle"></div>
+        <button class="cal-nav" onclick="calNext()">›</button>
       </div>
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">Outdoor walk</div>
-          <div class="check-sub">20–30 min · natural light</div>
-        </div>
+      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-legend">
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(196,123,90,0.3);border:1.5px solid var(--clay);"></div>Completed</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:rgba(201,169,110,0.2);border:1.5px solid var(--gold);"></div>Today</div>
+        <div class="cal-legend-item"><div class="cal-legend-dot" style="background:var(--deep);"></div>Viewing</div>
       </div>
+      <div class="day-detail" id="dayDetail" style="display:none;"></div>
     </div>
-
-    <div class="section-divider">Nourishment</div>
-    <div class="check-card">
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">3 whole-food meals</div>
-          <div class="check-sub">No skipping · protein + fat + complex carbs</div>
-        </div>
-      </div>
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">3 litres of water</div>
-          <div class="check-sub">Herbal teas count · limit caffeine to 1 before noon</div>
-        </div>
-      </div>
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">No alcohol</div>
-          <div class="check-sub">Non-negotiable for 75 days</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-divider">Mind & Recovery</div>
-    <div class="check-card">
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">10 min stress practice</div>
-          <div class="check-sub">Breathwork · meditation · journaling</div>
-        </div>
-        <div class="check-tag" style="background:rgba(196,123,90,0.1);color:var(--clay);">Cortisol</div>
-      </div>
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">10 pages read</div>
-          <div class="check-sub">Real book · no screens 30 min before bed</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section-divider">Cycle Tracking</div>
-    <div class="check-card">
-      <div class="check-item" onclick="toggle(this)">
-        <div class="check-box"></div>
-        <div class="check-label">
-          <div class="check-title">Daily cycle log</div>
-          <div class="check-sub">Energy · mood · discharge · symptoms</div>
-        </div>
-        <div class="check-tag" style="background:rgba(184,201,168,0.2);color:var(--moss);">Key</div>
-      </div>
-    </div>
-
   </div>
 
-  <!-- CYCLE LOG -->
-  <div class="cycle-log-wrap">
-    <div class="cycle-log-title">Today's cycle log</div>
-
-    <div class="cycle-section-label">Energy</div>
-    <div class="cycle-row" id="energyChips">
-      <div class="cycle-chip" onclick="chipToggle(this,'energy')">Low</div>
-      <div class="cycle-chip" onclick="chipToggle(this,'energy')">Medium</div>
-      <div class="cycle-chip" onclick="chipToggle(this,'energy')">High</div>
-    </div>
-
-    <div class="cycle-section-label" style="margin-top:12px;">Mood</div>
-    <div class="cycle-row" id="moodChips">
-      <div class="cycle-chip" onclick="chipToggle(this,'mood')">Calm</div>
-      <div class="cycle-chip" onclick="chipToggle(this,'mood')">Anxious</div>
-      <div class="cycle-chip" onclick="chipToggle(this,'mood')">Motivated</div>
-      <div class="cycle-chip" onclick="chipToggle(this,'mood')">Irritable</div>
-    </div>
-
-    <div class="cycle-section-label" style="margin-top:12px;">Notes</div>
-    <textarea class="cycle-notes" id="cycleNotes" placeholder="Discharge, symptoms, anything else…"></textarea>
-  </div>
-
-  <!-- NAV -->
   <div class="bottom-nav">
-    <button class="nav-btn nav-info" onclick="showInfo()">Rules</button>
-    <button class="nav-btn nav-complete" id="completeBtn" onclick="completeDay()">Complete day →</button>
+    <button class="nav-btn nav-secondary active" id="navToday" onclick="switchTab('today')">Today</button>
+    <button class="nav-btn nav-secondary" id="navCal" onclick="switchTab('calendar')">Calendar</button>
+    <button class="nav-btn nav-secondary" onclick="showInfo()">Rules</button>
+    <button class="nav-btn nav-complete" onclick="completeDay()">Done ✓</button>
   </div>
-
 </div>
 
-<!-- ══ COMPLETE OVERLAY ══ -->
-<div class="complete-overlay" id="completeOverlay">
+<div class="overlay" id="completeOverlay">
   <div class="complete-card fade-in">
     <div class="big-check">✓</div>
     <h3>Day <span id="completeDayNum">1</span> done.</h3>
@@ -933,228 +281,186 @@
   </div>
 </div>
 
-<!-- ══ INFO DRAWER ══ -->
-<div class="info-drawer" id="infoDrawer">
+<div class="overlay" id="infoDrawer" style="flex-direction:column;">
   <div class="drawer-backdrop" onclick="hideInfo()"></div>
   <div class="drawer-sheet">
     <div class="drawer-handle"></div>
-    <h3>The 6 Rules</h3>
-
-    <div class="info-rule">
-      <div class="info-rule-title">Movement <span style="color:var(--clay);font-size:12px;">Phase-adapted</span></div>
-      <div class="info-rule-body">One structured workout (45–60 min) + daily outdoor walk. Max 3 HIIT sessions per week. During luteal phase: reduce intensity, favour strength or yoga.</div>
+    <div class="drawer-top">
+      <h3>The 6 Rules</h3>
+      <button class="drawer-close" onclick="hideInfo()">✕</button>
     </div>
-    <div class="info-rule">
-      <div class="info-rule-title">Eat to nourish</div>
-      <div class="info-rule-body">3 meals, no skipping. Prioritise protein (1.6–2g/kg), healthy fats, complex carbs. No calorie deficit. No alcohol for 75 days.</div>
-    </div>
-    <div class="info-rule">
-      <div class="info-rule-title">3 litres of water</div>
-      <div class="info-rule-body">Herbal teas count. Limit caffeine to 1 cup before noon. Add electrolytes if training hard.</div>
-    </div>
-    <div class="info-rule">
-      <div class="info-rule-title">Read 10 pages</div>
-      <div class="info-rule-body">Real book only. No screens 30 min before bed — cortisol and melatonin are linked.</div>
-    </div>
-    <div class="info-rule">
-      <div class="info-rule-title">Stress practice <span style="color:var(--clay);font-size:12px;">Cortisol-critical</span></div>
-      <div class="info-rule-body">10 min daily: breathwork, meditation, or journaling. 7–9 hours sleep. Cold exposure is optional and follicular-phase only.</div>
-    </div>
-    <div class="info-rule">
-      <div class="info-rule-title">Track your cycle <span style="color:var(--moss);font-size:12px;">The key one</span></div>
-      <div class="info-rule-body">Log energy, mood, discharge, and symptoms daily. Adjust training by phase. Note any cycle length changes — they're data.</div>
-    </div>
+    <div class="info-rule"><div class="info-rule-title">Movement <span style="color:var(--clay);font-size:12px;">Phase-adapted</span></div><div class="info-rule-body">One structured workout (45–60 min) + daily outdoor walk. Max 3 HIIT sessions per week. During luteal: reduce intensity, favour strength or yoga.</div></div>
+    <div class="info-rule"><div class="info-rule-title">Eat to nourish</div><div class="info-rule-body">3 meals, no skipping. Prioritise protein (1.6–2g/kg), healthy fats, complex carbs. No calorie deficit. No alcohol for 75 days.</div></div>
+    <div class="info-rule"><div class="info-rule-title">3 litres of water</div><div class="info-rule-body">Herbal teas count. Limit caffeine to 1 cup before noon. Add electrolytes if training hard.</div></div>
+    <div class="info-rule"><div class="info-rule-title">Read 10 pages</div><div class="info-rule-body">Real book only. No screens 30 min before bed — cortisol and melatonin are linked.</div></div>
+    <div class="info-rule"><div class="info-rule-title">Stress practice <span style="color:var(--clay);font-size:12px;">Cortisol-critical</span></div><div class="info-rule-body">10 min daily: breathwork, meditation, or journaling. 7–9 hours sleep. Cold exposure optional — follicular phase only.</div></div>
+    <div class="info-rule"><div class="info-rule-title">Track your cycle <span style="color:var(--moss);font-size:12px;">The key one</span></div><div class="info-rule-body">Log energy, mood, discharge, and symptoms daily. Adjust training by phase. Note any cycle length changes — they're data.</div></div>
   </div>
 </div>
 
 <script>
-  // ── STATE ──
-  let state = {
-    name: '',
-    startDate: null,
-    currentDay: 1,
-    phase: 'Follicular',
-    completedDays: [],
-    todayChecks: 0,
-    totalChecks: 8
-  };
+const CHECK_LABELS=['Workout session','Outdoor walk','3 whole-food meals','3 litres of water','No alcohol','10 min stress practice','10 pages read','Daily cycle log'];
+const PHASE_WORKOUT={Menstrual:'Gentle yoga or walking only today',Follicular:'Strength or HIIT — your energy is high',Ovulation:'Moderate intensity — protect this window',Luteal:'Strength or Pilates — avoid overloading'};
+const COMPLETE_MSGS={Menstrual:'Rest is strength. Your body is doing important work.',Follicular:"You're in your power phase. Make it count.",Ovulation:'Peak window — protect your energy tonight.',Luteal:"Luteal discipline is the hardest. That's why it matters most."};
 
-  const PHASE_WORKOUT = {
-    Menstrual: 'Gentle yoga or walking only today',
-    Follicular: 'Strength or HIIT — your energy is high',
-    Ovulation: 'Moderate intensity — protect this window',
-    Luteal: 'Strength or Pilates — avoid overloading'
-  };
+let state={name:'',startDate:null,currentDay:1,phase:'Follicular',completedDays:[],dayData:{}};
+let calViewDate=new Date();
+let viewingDay=null;
 
-  const COMPLETE_MSGS = {
-    Menstrual: 'Rest is strength. Your body is doing important work.',
-    Follicular: 'You\'re in your power phase. Make it count.',
-    Ovulation: 'Peak window — protect your energy tonight.',
-    Luteal: 'Luteal discipline is the hardest. That\'s why it matters most.'
-  };
+function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 
-  // ── NAV ──
-  function goTo(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    window.scrollTo(0, 0);
+function switchTab(tab){
+  document.getElementById('tabToday').classList.toggle('active',tab==='today');
+  document.getElementById('tabCalendar').classList.toggle('active',tab==='calendar');
+  document.getElementById('navToday').classList.toggle('active',tab==='today');
+  document.getElementById('navCal').classList.toggle('active',tab==='calendar');
+  if(tab==='calendar')renderCalendar();
+}
+
+function selectPhase(el,phase){document.querySelectorAll('.phase-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');state.phase=phase;}
+
+function startProgram(){
+  const name=document.getElementById('userName').value.trim();
+  const date=document.getElementById('startDate').value;
+  if(!name||!date||!state.phase){alert('Please fill in all fields and select your cycle phase.');return;}
+  state.name=name;state.startDate=new Date(date+'T00:00:00');
+  save();renderTracker();goTo('tracker');
+}
+
+function loadExisting(){
+  const saved=localStorage.getItem('75strong');
+  if(saved){state=JSON.parse(saved);state.startDate=new Date(state.startDate);if(!state.dayData)state.dayData={};renderTracker();goTo('tracker');}
+  else alert('No saved progress found. Start a new program!');
+}
+
+function renderTracker(){
+  const day=state.currentDay;
+  document.getElementById('dayNum').textContent=day;
+  document.getElementById('completeDayNum').textContent=day;
+  document.getElementById('dayProgress').textContent=day;
+  document.getElementById('phaseBadge').textContent=state.phase;
+  document.getElementById('workoutSub').textContent=PHASE_WORKOUT[state.phase];
+  const d=new Date(state.startDate);d.setDate(d.getDate()+day-1);
+  document.getElementById('dateDisplay').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('dayBarFill').style.width=((day/75)*100)+'%';
+  renderStreak();loadDayChecks(day);loadDayCycleLog(day);
+}
+
+function renderStreak(){
+  const dots=document.getElementById('streakDots');dots.innerHTML='';
+  const show=Math.min(state.currentDay,15);
+  for(let i=0;i<show;i++){const d=document.createElement('div');d.className='streak-dot';const n=state.currentDay-show+i+1;if(n===state.currentDay)d.classList.add('today');else if(state.completedDays.includes(n))d.classList.add('filled');dots.appendChild(d);}
+  let s=0;for(let i=state.currentDay-1;i>=1;i--){if(state.completedDays.includes(i))s++;else break;}
+  document.getElementById('streakNum').textContent=s;
+}
+
+function toggle(el,idx){
+  el.classList.toggle('done');
+  const day=viewingDay||state.currentDay;
+  if(!state.dayData[day])state.dayData[day]={checks:[]};
+  const checks=state.dayData[day].checks;
+  if(el.classList.contains('done')){if(!checks.includes(idx))checks.push(idx);}
+  else{const i=checks.indexOf(idx);if(i>-1)checks.splice(i,1);}
+  updateRing();save();
+}
+
+function loadDayChecks(day){
+  const checks=(state.dayData[day]&&state.dayData[day].checks)||[];
+  document.querySelectorAll('.check-item').forEach((el,idx)=>el.classList.toggle('done',checks.includes(idx)));
+  updateRing();
+}
+
+function loadDayCycleLog(day){
+  const data=state.dayData[day]||{};
+  document.querySelectorAll('[onclick*="energy"]').forEach(c=>c.classList.toggle('selected',c.textContent===data.energy));
+  document.querySelectorAll('[onclick*="mood"]').forEach(c=>c.classList.toggle('selected',c.textContent===data.mood));
+  document.getElementById('cycleNotes').value=data.notes||'';
+}
+
+function updateRing(){
+  const total=document.querySelectorAll('.check-item').length;
+  const done=document.querySelectorAll('.check-item.done').length;
+  const pct=Math.round((done/total)*100);
+  document.getElementById('dayRing').style.strokeDashoffset=132-(pct/100)*132;
+  document.getElementById('ringPct').textContent=pct+'%';
+}
+
+function chipToggle(el,group){
+  const day=viewingDay||state.currentDay;
+  if(!state.dayData[day])state.dayData[day]={checks:[]};
+  document.querySelectorAll('[onclick*="'+group+'"]').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');state.dayData[day][group]=el.textContent;save();
+}
+
+function saveNotes(){
+  const day=viewingDay||state.currentDay;
+  if(!state.dayData[day])state.dayData[day]={checks:[]};
+  state.dayData[day].notes=document.getElementById('cycleNotes').value;save();
+}
+
+function completeDay(){
+  if(!state.completedDays.includes(state.currentDay))state.completedDays.push(state.currentDay);
+  document.getElementById('completeMsg').textContent=COMPLETE_MSGS[state.phase]||'One day stronger.';
+  document.getElementById('completeOverlay').classList.add('show');save();
+}
+
+function nextDay(){
+  document.getElementById('completeOverlay').classList.remove('show');
+  if(state.currentDay<75)state.currentDay++;
+  viewingDay=null;save();renderTracker();window.scrollTo(0,0);
+}
+
+function renderCalendar(){
+  const year=calViewDate.getFullYear(),month=calViewDate.getMonth();
+  const today=new Date();today.setHours(0,0,0,0);
+  const start=new Date(state.startDate);start.setHours(0,0,0,0);
+  document.getElementById('calMonthTitle').textContent=calViewDate.toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+  const grid=document.getElementById('calGrid');grid.innerHTML='';
+  ['M','T','W','T','F','S','S'].forEach(l=>{const lbl=document.createElement('div');lbl.className='cal-day-label';lbl.textContent=l;grid.appendChild(lbl);});
+  let dow=new Date(year,month,1).getDay();dow=dow===0?6:dow-1;
+  for(let i=0;i<dow;i++){const e=document.createElement('div');e.className='cal-cell empty';grid.appendChild(e);}
+  const dim=new Date(year,month+1,0).getDate();
+  for(let d=1;d<=dim;d++){
+    const cd=new Date(year,month,d);cd.setHours(0,0,0,0);
+    const dn=Math.round((cd-start)/86400000)+1;
+    const inProg=dn>=1&&dn<=75;
+    const isToday=cd.getTime()===today.getTime();
+    const isFuture=cd>today;
+    const cell=document.createElement('div');cell.className='cal-cell';
+    if(!inProg||isFuture)cell.classList.add('future');
+    if(state.completedDays.includes(dn))cell.classList.add('completed');
+    if(isToday)cell.classList.add('today-cell');
+    if(viewingDay===dn)cell.classList.add('viewing');
+    cell.innerHTML='<span class="cal-cell-num">'+d+'</span>'+(state.completedDays.includes(dn)?'<div class="cal-cell-dot"></div>':'');
+    if(inProg&&!isFuture)cell.onclick=()=>viewDay(dn,cd);
+    grid.appendChild(cell);
   }
+}
 
-  function selectPhase(el, phase) {
-    document.querySelectorAll('.phase-option').forEach(o => o.classList.remove('selected'));
-    el.classList.add('selected');
-    state.phase = phase;
-  }
+function viewDay(dn,date){
+  viewingDay=dn;renderCalendar();
+  const detail=document.getElementById('dayDetail');detail.style.display='block';
+  const data=state.dayData[dn]||{};const checks=data.checks||[];
+  const isToday=dn===state.currentDay;
+  const dateStr=date.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  detail.innerHTML='<div class="day-detail-header"><div><div class="day-detail-title">Day '+dn+'</div><div class="day-detail-date">'+dateStr+'</div></div>'+(isToday?'<button class="day-detail-edit" onclick="switchTab(\'today\')">Go to today</button>':'<button class="day-detail-edit" onclick="editDay('+dn+')">Edit day</button>')+'</div><div class="day-detail-checks">'+CHECK_LABELS.map((l,i)=>'<div class="detail-check-row"><div class="detail-dot'+(checks.includes(i)?' done':'')+'"></div><div class="detail-check-name'+(checks.includes(i)?' done':'')+'">'+l+'</div></div>').join('')+'</div>'+(data.energy||data.mood||data.notes?'<div style="padding:12px 20px 16px;border-top:1px solid var(--border);">'+(data.energy?'<span style="font-size:12px;color:var(--muted);">Energy: <strong style="color:var(--deep)">'+data.energy+'</strong></span>':'')+(data.mood?'<span style="font-size:12px;color:var(--muted);margin-left:12px;">Mood: <strong style="color:var(--deep)">'+data.mood+'</strong></span>':'')+(data.notes?'<div style="font-size:13px;color:var(--muted);margin-top:8px;line-height:1.5;">'+data.notes+'</div>':'')+'</div>':'<div class="no-data">No data logged for this day yet.</div>');
+  detail.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
 
-  function startProgram() {
-    const name = document.getElementById('userName').value.trim();
-    const date = document.getElementById('startDate').value;
-    if (!name || !date || !state.phase) {
-      alert('Please fill in all fields and select your cycle phase.');
-      return;
-    }
-    state.name = name;
-    state.startDate = new Date(date);
-    save();
-    renderTracker();
-    goTo('tracker');
-  }
+function editDay(dn){
+  viewingDay=dn;state.currentDay=dn;
+  switchTab('today');renderTracker();
+}
 
-  function loadExisting() {
-    const saved = localStorage.getItem('75strong');
-    if (saved) {
-      state = JSON.parse(saved);
-      state.startDate = new Date(state.startDate);
-      renderTracker();
-      goTo('tracker');
-    } else {
-      alert('No saved progress found. Start a new program!');
-    }
-  }
+function calPrev(){calViewDate.setMonth(calViewDate.getMonth()-1);renderCalendar();}
+function calNext(){calViewDate.setMonth(calViewDate.getMonth()+1);renderCalendar();}
+function showInfo(){document.getElementById('infoDrawer').classList.add('show');document.body.style.overflow='hidden';}
+function hideInfo(){document.getElementById('infoDrawer').classList.remove('show');document.body.style.overflow='';}
+function save(){try{localStorage.setItem('75strong',JSON.stringify(state));}catch(e){}}
 
-  // ── RENDER ──
-  function renderTracker() {
-    const day = state.currentDay;
-    document.getElementById('dayNum').textContent = day;
-    document.getElementById('completeDayNum').textContent = day;
-    document.getElementById('dayProgress').textContent = day;
-    document.getElementById('phaseBadge').textContent = state.phase;
-    document.getElementById('workoutSub').textContent = PHASE_WORKOUT[state.phase];
-
-    // Date
-    const d = new Date(state.startDate);
-    d.setDate(d.getDate() + day - 1);
-    document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
-
-    // Day bar
-    document.getElementById('dayBarFill').style.width = ((day / 75) * 100) + '%';
-
-    // Streak dots (last 10 days)
-    renderStreak();
-
-    // Reset checks
-    document.querySelectorAll('.check-item').forEach(el => el.classList.remove('done'));
-    updateRing();
-  }
-
-  function renderStreak() {
-    const dots = document.getElementById('streakDots');
-    dots.innerHTML = '';
-    const show = Math.min(state.currentDay, 15);
-    let streak = 0;
-
-    for (let i = 0; i < show; i++) {
-      const d = document.createElement('div');
-      d.className = 'streak-dot';
-      const dayNum = state.currentDay - show + i + 1;
-      if (dayNum === state.currentDay) {
-        d.classList.add('today');
-      } else if (state.completedDays.includes(dayNum)) {
-        d.classList.add('filled');
-        streak++;
-      }
-      dots.appendChild(d);
-    }
-
-    // Calculate actual streak
-    let s = 0;
-    for (let i = state.currentDay - 1; i >= 1; i--) {
-      if (state.completedDays.includes(i)) s++;
-      else break;
-    }
-    document.getElementById('streakNum').textContent = s;
-  }
-
-  // ── CHECKLIST ──
-  function toggle(el) {
-    el.classList.toggle('done');
-    updateRing();
-  }
-
-  function updateRing() {
-    const total = document.querySelectorAll('.check-item').length;
-    const done = document.querySelectorAll('.check-item.done').length;
-    const pct = Math.round((done / total) * 100);
-    const circumference = 132;
-    const offset = circumference - (pct / 100) * circumference;
-    document.getElementById('dayRing').style.strokeDashoffset = offset;
-    document.getElementById('ringPct').textContent = pct + '%';
-    state.todayChecks = done;
-  }
-
-  // ── CYCLE CHIPS ──
-  function chipToggle(el, group) {
-    document.querySelectorAll(`[onclick*="${group}"]`).forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-  }
-
-  // ── COMPLETE DAY ──
-  function completeDay() {
-    if (!state.completedDays.includes(state.currentDay)) {
-      state.completedDays.push(state.currentDay);
-    }
-    document.getElementById('completeMsg').textContent = COMPLETE_MSGS[state.phase] || 'One day stronger.';
-    document.getElementById('completeOverlay').classList.add('show');
-    save();
-  }
-
-  function nextDay() {
-    document.getElementById('completeOverlay').classList.remove('show');
-    if (state.currentDay < 75) {
-      state.currentDay++;
-      // Auto-advance phase roughly
-      const phases = ['Menstrual', 'Follicular', 'Ovulation', 'Luteal'];
-      // Keep phase manual — user updates via info drawer hint
-    }
-    save();
-    renderTracker();
-    window.scrollTo(0, 0);
-  }
-
-  // ── INFO ──
-  function showInfo() {
-    document.getElementById('infoDrawer').classList.add('show');
-  }
-
-  function hideInfo() {
-    document.getElementById('infoDrawer').classList.remove('show');
-  }
-
-  // ── PERSIST ──
-  function save() {
-    try { localStorage.setItem('75strong', JSON.stringify(state)); } catch(e) {}
-  }
-
-  // ── INIT ──
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('startDate').value = today;
+document.getElementById('startDate').value=new Date().toISOString().split('T')[0];
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideInfo();});
 </script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js');
-    });
-  }
-</script>
+<script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js');});}</script>
 </body>
 </html>
