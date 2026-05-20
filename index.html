@@ -151,8 +151,8 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
   <div class="badge">75 Days · For Her</div>
   <h1>75 <em>Strong</em></h1>
   <p>Discipline that works <em>with</em> your biology. Built for hormones, cortisol, and fertility.</p>
-  <button class="btn-primary" onclick="goTo('setup')">Begin your 75</button>
-  <button class="btn-ghost" onclick="loadExisting()">Continue where I left off</button>
+  <button class="btn-primary" onclick="loadExisting()">Log today</button>
+  <button class="btn-ghost" onclick="goTo('setup')">Start new program</button>
 </div>
 
 <div id="setup" class="screen" style="padding:56px 28px 40px;background:var(--warm-white);">
@@ -216,6 +216,7 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
         <div class="check-item" onclick="toggle(this,2)"><div class="check-box"></div><div class="check-label"><div class="check-title">3 whole-food meals</div><div class="check-sub">No skipping · protein + fat + complex carbs</div></div></div>
         <div class="check-item" onclick="toggle(this,3)"><div class="check-box"></div><div class="check-label"><div class="check-title">3 litres of water</div><div class="check-sub">Herbal teas count · 1 coffee max before noon</div></div></div>
         <div class="check-item" onclick="toggle(this,4)"><div class="check-box"></div><div class="check-label"><div class="check-title">No alcohol</div><div class="check-sub">Non-negotiable for 75 days</div></div></div>
+        <div class="check-item" onclick="toggle(this,8)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily supplements</div><div class="check-sub">Omega-3 · ubiquinol · folate · magnesium · iron</div></div></div>
       </div>
       <div class="section-divider">Mind & Recovery</div>
       <div class="check-card">
@@ -224,26 +225,8 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
       </div>
       <div class="section-divider">Cycle Tracking</div>
       <div class="check-card">
-        <div class="check-item" onclick="toggle(this,7)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily cycle log</div><div class="check-sub">Energy · mood · discharge · symptoms</div></div><div class="check-tag" style="background:rgba(184,201,168,0.2);color:var(--moss);">Key</div></div>
+        <div class="check-item" onclick="toggle(this,7)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily cycle log</div><div class="check-sub">Track on Clue</div></div><div class="check-tag" style="background:rgba(184,201,168,0.2);color:var(--moss);">Key</div></div>
       </div>
-    </div>
-    <div class="cycle-log-wrap">
-      <div class="cycle-log-title">Today's cycle log</div>
-      <div class="cycle-section-label">Energy</div>
-      <div class="cycle-row">
-        <div class="cycle-chip" onclick="chipToggle(this,'energy')">Low</div>
-        <div class="cycle-chip" onclick="chipToggle(this,'energy')">Medium</div>
-        <div class="cycle-chip" onclick="chipToggle(this,'energy')">High</div>
-      </div>
-      <div class="cycle-section-label" style="margin-top:12px;">Mood</div>
-      <div class="cycle-row">
-        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Calm</div>
-        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Anxious</div>
-        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Motivated</div>
-        <div class="cycle-chip" onclick="chipToggle(this,'mood')">Irritable</div>
-      </div>
-      <div class="cycle-section-label" style="margin-top:12px;">Notes</div>
-      <textarea class="cycle-notes" id="cycleNotes" placeholder="Discharge, symptoms, anything else…" oninput="saveNotes()"></textarea>
     </div>
   </div>
 
@@ -299,7 +282,7 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
 </div>
 
 <script>
-const CHECK_LABELS=['Workout session','Outdoor walk','3 whole-food meals','3 litres of water','No alcohol','10 min stress practice','10 pages read','Daily cycle log'];
+const CHECK_LABELS=['Workout session','Outdoor walk','3 whole-food meals','3 litres of water','No alcohol','10 min stress practice','10 pages read','Daily cycle log','Daily supplements'];
 const PHASE_WORKOUT={Menstrual:'Gentle yoga or walking only today',Follicular:'Strength or HIIT — your energy is high',Ovulation:'Moderate intensity — protect this window',Luteal:'Strength or Pilates — avoid overloading'};
 const COMPLETE_MSGS={Menstrual:'Rest is strength. Your body is doing important work.',Follicular:"You're in your power phase. Make it count.",Ovulation:'Peak window — protect your energy tonight.',Luteal:"Luteal discipline is the hardest. That's why it matters most."};
 
