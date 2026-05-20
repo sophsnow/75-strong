@@ -228,6 +228,10 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
         <div class="check-item" onclick="toggle(this,7)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily cycle log</div><div class="check-sub">Track on Clue</div></div><div class="check-tag" style="background:rgba(184,201,168,0.2);color:var(--moss);">Key</div></div>
       </div>
     </div>
+    <div style="margin:0 20px 28px;background:white;border-radius:14px;border:1px solid var(--border);padding:20px;">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:12px;">Daily notes</div>
+      <textarea id="dayNotes" oninput="saveNotes()" placeholder="Macros · calories · anything else…" style="width:100%;padding:12px 14px;background:var(--cream);border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--deep);resize:none;outline:none;height:100px;line-height:1.6;"></textarea>
+    </div>
   </div>
 
   <div id="tabCalendar" class="tab-content">
@@ -355,9 +359,7 @@ function loadDayChecks(day){
 
 function loadDayCycleLog(day){
   const data=state.dayData[day]||{};
-  document.querySelectorAll('[onclick*="energy"]').forEach(c=>c.classList.toggle('selected',c.textContent===data.energy));
-  document.querySelectorAll('[onclick*="mood"]').forEach(c=>c.classList.toggle('selected',c.textContent===data.mood));
-  document.getElementById('cycleNotes').value=data.notes||'';
+  document.getElementById('dayNotes').value=data.notes||'';
 }
 
 function updateRing(){
@@ -378,7 +380,7 @@ function chipToggle(el,group){
 function saveNotes(){
   const day=viewingDay||state.currentDay;
   if(!state.dayData[day])state.dayData[day]={checks:[]};
-  state.dayData[day].notes=document.getElementById('cycleNotes').value;save();
+  state.dayData[day].notes=document.getElementById('dayNotes').value;save();
 }
 
 function completeDay(){
