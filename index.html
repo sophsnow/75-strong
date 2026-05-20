@@ -232,6 +232,9 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
       <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:12px;">Daily notes</div>
       <textarea id="dayNotes" oninput="saveNotes()" placeholder="Macros · calories · anything else…" style="width:100%;padding:12px 14px;background:var(--cream);border:1px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--deep);resize:none;outline:none;height:100px;line-height:1.6;"></textarea>
     </div>
+    <div style="margin:0 20px 32px;">
+      <button class="btn-primary" style="width:100%;padding:18px;" onclick="completeDay()">Complete day ✓</button>
+    </div>
   </div>
 
   <div id="tabCalendar" class="tab-content">
@@ -255,7 +258,6 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
     <button class="nav-btn nav-secondary active" id="navToday" onclick="switchTab('today')">Today</button>
     <button class="nav-btn nav-secondary" id="navCal" onclick="switchTab('calendar')">Calendar</button>
     <button class="nav-btn nav-secondary" onclick="showInfo()">Rules</button>
-    <button class="nav-btn nav-complete" onclick="completeDay()">Done ✓</button>
   </div>
 </div>
 
@@ -445,6 +447,10 @@ function save(){try{localStorage.setItem('75strong',JSON.stringify(state));}catc
 
 document.getElementById('startDate').value=new Date().toISOString().split('T')[0];
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideInfo();});
+
+// Auto-load if saved session exists
+const _saved=localStorage.getItem('75strong');
+if(_saved){try{state=JSON.parse(_saved);state.startDate=new Date(state.startDate);if(!state.dayData)state.dayData={};renderTracker();goTo('tracker');}catch(e){}}
 </script>
 <script>if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js');});}</script>
 </body>
