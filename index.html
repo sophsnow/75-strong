@@ -213,19 +213,21 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
       </div>
       <div class="section-divider">Nourishment</div>
       <div class="check-card">
-        <div class="check-item" onclick="toggle(this,2)"><div class="check-box"></div><div class="check-label"><div class="check-title">3 whole-food meals</div><div class="check-sub">No skipping · protein + fat + complex carbs</div></div></div>
+        <div class="check-item" onclick="toggle(this,2)"><div class="check-box"></div><div class="check-label"><div class="check-title">Healthy eating</div><div class="check-sub">Balance hormones · avoid artificial</div></div></div>
         <div class="check-item" onclick="toggle(this,3)"><div class="check-box"></div><div class="check-label"><div class="check-title">3 litres of water</div><div class="check-sub">Herbal teas count · 1 coffee max before noon</div></div></div>
         <div class="check-item" onclick="toggle(this,4)"><div class="check-box"></div><div class="check-label"><div class="check-title">No alcohol</div><div class="check-sub">Non-negotiable for 75 days</div></div></div>
-        <div class="check-item" onclick="toggle(this,8)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily supplements</div><div class="check-sub">Omega-3 · ubiquinol · folate · magnesium · iron</div></div></div>
+        <div class="check-item" onclick="toggle(this,5)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily supplements</div><div class="check-sub">Omega-3 · ubiquinol · folate · magnesium · iron</div></div></div>
+        <div class="check-item" onclick="toggle(this,6)"><div class="check-box"></div><div class="check-label"><div class="check-title">Dinner 3hrs before bed</div><div class="check-sub">Supports HRV and sleep quality</div></div></div>
       </div>
       <div class="section-divider">Mind & Recovery</div>
       <div class="check-card">
-        <div class="check-item" onclick="toggle(this,5)"><div class="check-box"></div><div class="check-label"><div class="check-title">10 min stress practice</div><div class="check-sub">Breathwork · meditation · journaling</div></div><div class="check-tag" style="background:rgba(196,123,90,0.1);color:var(--clay);">Cortisol</div></div>
-        <div class="check-item" onclick="toggle(this,6)"><div class="check-box"></div><div class="check-label"><div class="check-title">10 pages read</div><div class="check-sub">Real book · no screens 30 min before bed</div></div></div>
+        <div class="check-item" onclick="toggle(this,7)"><div class="check-box"></div><div class="check-label"><div class="check-title">10 min stress practice</div><div class="check-sub">Meditation or breathwork</div></div><div class="check-tag" style="background:rgba(196,123,90,0.1);color:var(--clay);">Cortisol</div></div>
+        <div class="check-item" onclick="toggle(this,8)"><div class="check-box"></div><div class="check-label"><div class="check-title">10 pages read</div><div class="check-sub">Real book · no screens 30 min before bed</div></div></div>
+        <div class="check-item" onclick="toggle(this,9)"><div class="check-box"></div><div class="check-label"><div class="check-title">Same bed/wake time ±30min</div><div class="check-sub">Anchors cortisol rhythm and HRV</div></div></div>
       </div>
       <div class="section-divider">Cycle Tracking</div>
       <div class="check-card">
-        <div class="check-item" onclick="toggle(this,7)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily cycle log</div><div class="check-sub">Track on Clue</div></div><div class="check-tag" style="background:rgba(184,201,168,0.2);color:var(--moss);">Key</div></div>
+        <div class="check-item" onclick="toggle(this,10)"><div class="check-box"></div><div class="check-label"><div class="check-title">Daily cycle log</div><div class="check-sub">Track on Clue</div></div><div class="check-tag" style="background:rgba(184,201,168,0.2);color:var(--moss);">Key</div></div>
       </div>
     </div>
     <div style="margin:0 20px 28px;background:white;border-radius:14px;border:1px solid var(--border);padding:20px;">
@@ -288,7 +290,7 @@ body{background:var(--cream);color:var(--deep);font-family:'DM Sans',sans-serif;
 </div>
 
 <script>
-const CHECK_LABELS=['Workout session','Outdoor walk','3 whole-food meals','3 litres of water','No alcohol','10 min stress practice','10 pages read','Daily cycle log','Daily supplements'];
+const CHECK_LABELS=['Workout session','Outdoor walk','Healthy eating','3 litres of water','No alcohol','Daily supplements','Dinner 3hrs before bed','10 min stress practice','10 pages read','Same bed/wake time ±30min','Daily cycle log'];
 const PHASE_WORKOUT={Menstrual:'Gentle yoga or walking only today',Follicular:'Strength or HIIT — your energy is high',Ovulation:'Moderate intensity — protect this window',Luteal:'Strength or Pilates — avoid overloading'};
 const COMPLETE_MSGS={Menstrual:'Rest is strength. Your body is doing important work.',Follicular:"You're in your power phase. Make it count.",Ovulation:'Peak window — protect your energy tonight.',Luteal:"Luteal discipline is the hardest. That's why it matters most."};
 
@@ -344,12 +346,13 @@ function renderStreak(){
 }
 
 function toggle(el,idx){
-  el.classList.toggle('done');
   const day=viewingDay||state.currentDay;
-  if(!state.dayData[day])state.dayData[day]={checks:[]};
+  if(!state.dayData[day])state.dayData[day]={checks:[],notes:''};
+  if(!Array.isArray(state.dayData[day].checks))state.dayData[day].checks=[];
   const checks=state.dayData[day].checks;
-  if(el.classList.contains('done')){if(!checks.includes(idx))checks.push(idx);}
-  else{const i=checks.indexOf(idx);if(i>-1)checks.splice(i,1);}
+  const pos=checks.indexOf(idx);
+  if(pos>-1){checks.splice(pos,1);el.classList.remove('done');}
+  else{checks.push(idx);el.classList.add('done');}
   updateRing();save();
 }
 
