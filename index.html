@@ -154,15 +154,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
   <h2 style="font-family:'Syne',sans-serif;font-size:32px;margin-bottom:6px;font-weight:800;">Set up your 75</h2>
   <p style="font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:36px;">Takes 30 seconds.</p>
   <div class="field-group"><label class="field-label">Your name</label><input class="field-input" type="text" id="userName" placeholder="e.g. Sophia"/></div>
-  <div class="field-group"><label class="field-label">Start date</label><input class="field-input" type="date" id="startDate"/></div>
-  <div class="field-group">
-    <label class="field-label">Current cycle phase</label>
-    <div class="phase-options">
-      <div class="phase-option" onclick="selectPhase(this,'Menstrual')"><div class="phase-name">Menstrual</div><div class="phase-days">Days 1–5</div></div>
-      <div class="phase-option" onclick="selectPhase(this,'Follicular')"><div class="phase-name">Follicular</div><div class="phase-days">Days 6–13</div></div>
-      <div class="phase-option" onclick="selectPhase(this,'Ovulation')"><div class="phase-name">Ovulation</div><div class="phase-days">Days 14–16</div></div>
-      <div class="phase-option" onclick="selectPhase(this,'Luteal')"><div class="phase-name">Luteal</div><div class="phase-days">Days 17–28</div></div>
-    </div>
+  <div class="field-group"><label class="field-label">Program start date</label><input class="field-input" type="date" id="startDate"/></div>
+  <div class="field-group"><label class="field-label">Last period start date</label><input class="field-input" type="date" id="lastPeriodDate"/></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px;">
+    <div><label class="field-label">Cycle length (days)</label><input class="field-input" type="number" id="cycleLength" value="28" min="21" max="40"/></div>
+    <div><label class="field-label">Period length (days)</label><input class="field-input" type="number" id="periodLength" value="5" min="2" max="10"/></div>
   </div>
   <button class="btn-primary" style="width:100%;margin-top:8px;" onclick="startProgram()">Start 75 Strong</button>
 </div>
@@ -175,7 +171,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
         <div class="day-display">Day <em id="dayNum">1</em></div>
         <div class="date-display" id="dateDisplay">—</div>
       </div>
-      <div class="phase-badge" id="phaseBadge">Follicular</div>
+      <div class="phase-badge" id="phaseBadge" onclick="showPhaseModal()" style="cursor:pointer;" title="Tap to update">Follicular ✎</div>
     </div>
     <div class="progress-ring-wrap">
       <div class="ring-container">
@@ -266,7 +262,33 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
   </div>
 </div>
 
-<div class="overlay" id="infoDrawer" style="flex-direction:column;">
+<div class="overlay" id="phaseModal" style="flex-direction:column;justify-content:flex-end;">
+  <div class="drawer-backdrop" onclick="hidePhaseModal()"></div>
+  <div class="drawer-sheet">
+    <div class="drawer-handle"></div>
+    <div class="drawer-top">
+      <h3>Update cycle</h3>
+      <button class="drawer-close" onclick="hidePhaseModal()">✕</button>
+    </div>
+    <div style="margin-bottom:20px;">
+      <label class="field-label">Last period start date</label>
+      <input class="field-input" type="date" id="modalLastPeriod"/>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div><label class="field-label">Cycle length</label><input class="field-input" type="number" id="modalCycleLength" min="21" max="40"/></div>
+      <div><label class="field-label">Period length</label><input class="field-input" type="number" id="modalPeriodLength" min="2" max="10"/></div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;">Auto-calculates your phase daily. Override below if needed.</p>
+    <label class="field-label">Manual override (optional)</label>
+    <div class="phase-options" style="margin-bottom:24px;" id="modalPhaseOptions">
+      <div class="phase-option" onclick="selectModalPhase(this,'Menstrual')"><div class="phase-name">Menstrual</div><div class="phase-days">Days 1–5</div></div>
+      <div class="phase-option" onclick="selectModalPhase(this,'Follicular')"><div class="phase-name">Follicular</div><div class="phase-days">Days 6–13</div></div>
+      <div class="phase-option" onclick="selectModalPhase(this,'Ovulation')"><div class="phase-name">Ovulation</div><div class="phase-days">Days 14–16</div></div>
+      <div class="phase-option" onclick="selectModalPhase(this,'Luteal')"><div class="phase-name">Luteal</div><div class="phase-days">Days 17–28</div></div>
+    </div>
+    <button class="btn-primary" style="width:100%;" onclick="savePhaseModal()">Update</button>
+  </div>
+</div>
   <div class="drawer-backdrop" onclick="hideInfo()"></div>
   <div class="drawer-sheet">
     <div class="drawer-handle"></div>
@@ -288,9 +310,32 @@ const CHECK_LABELS=['Workout session','Outdoor walk','Healthy eating','3 litres 
 const PHASE_WORKOUT={Menstrual:'Gentle yoga or walking only today',Follicular:'Strength or HIIT — your energy is high',Ovulation:'Moderate intensity — protect this window',Luteal:'Strength or Pilates — avoid overloading'};
 const COMPLETE_MSGS={Menstrual:'Rest is strength. Your body is doing important work.',Follicular:"You're in your power phase. Make it count.",Ovulation:'Peak window — protect your energy tonight.',Luteal:"Luteal discipline is the hardest. That's why it matters most."};
 
-let state={name:'',startDate:null,currentDay:1,phase:'Follicular',completedDays:[],dayData:{}};
+let state={name:'',startDate:null,currentDay:1,phase:'Follicular',phaseOverride:null,lastPeriodDate:null,cycleLength:28,periodLength:5,completedDays:[],dayData:{}};
 let calViewDate=new Date();
 let viewingDay=null;
+let modalPhaseOverride=null;
+
+// ── PHASE CALCULATION ──
+function calcPhase(lastPeriod, cycleLen, periodLen){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const lp=new Date(lastPeriod); lp.setHours(0,0,0,0);
+  let dayOfCycle=((today-lp)/86400000 % cycleLen);
+  if(dayOfCycle<0) dayOfCycle+=cycleLen;
+  dayOfCycle=Math.floor(dayOfCycle)+1;
+  const ovulationDay=cycleLen-14;
+  if(dayOfCycle<=periodLen) return {phase:'Menstrual',day:dayOfCycle};
+  if(dayOfCycle<=ovulationDay-1) return {phase:'Follicular',day:dayOfCycle};
+  if(dayOfCycle<=ovulationDay+1) return {phase:'Ovulation',day:dayOfCycle};
+  return {phase:'Luteal',day:dayOfCycle};
+}
+
+function getCurrentPhase(){
+  if(state.phaseOverride) return state.phaseOverride;
+  if(state.lastPeriodDate){
+    return calcPhase(state.lastPeriodDate, state.cycleLength, state.periodLength).phase;
+  }
+  return state.phase;
+}
 
 function goTo(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
 
@@ -302,31 +347,47 @@ function switchTab(tab){
   if(tab==='calendar')renderCalendar();
 }
 
-function selectPhase(el,phase){document.querySelectorAll('.phase-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');state.phase=phase;}
-
 function startProgram(){
   const name=document.getElementById('userName').value.trim();
   const date=document.getElementById('startDate').value;
-  if(!name||!date||!state.phase){alert('Please fill in all fields and select your cycle phase.');return;}
-  state.name=name;state.startDate=new Date(date+'T00:00:00');
+  const lastPeriod=document.getElementById('lastPeriodDate').value;
+  const cycleLen=parseInt(document.getElementById('cycleLength').value)||28;
+  const periodLen=parseInt(document.getElementById('periodLength').value)||5;
+  if(!name||!date||!lastPeriod){alert('Please fill in all fields.');return;}
+  state.name=name;
+  state.startDate=new Date(date+'T00:00:00');
+  state.lastPeriodDate=lastPeriod;
+  state.cycleLength=cycleLen;
+  state.periodLength=periodLen;
+  state.phase=getCurrentPhase();
+  state.phaseOverride=null;
   save();renderTracker();goTo('tracker');
 }
 
 function loadExisting(){
   const saved=localStorage.getItem('75strong');
-  if(saved){state=JSON.parse(saved);state.startDate=new Date(state.startDate);if(!state.dayData)state.dayData={};renderTracker();goTo('tracker');}
-  else alert('No saved progress found. Start a new program!');
+  if(saved){
+    state=JSON.parse(saved);
+    state.startDate=new Date(state.startDate);
+    if(!state.dayData)state.dayData={};
+    if(!state.cycleLength)state.cycleLength=28;
+    if(!state.periodLength)state.periodLength=5;
+    renderTracker();goTo('tracker');
+  } else alert('No saved progress found. Start a new program!');
 }
 
 function renderTracker(){
   const day=state.currentDay;
+  const phase=getCurrentPhase();
   document.getElementById('dayNum').textContent=day;
   document.getElementById('completeDayNum').textContent=day;
   document.getElementById('dayProgress').textContent=day;
-  document.getElementById('phaseBadge').textContent=state.phase;
-  document.getElementById('workoutSub').textContent=PHASE_WORKOUT[state.phase];
+  const cycleInfo=state.lastPeriodDate?calcPhase(state.lastPeriodDate,state.cycleLength,state.periodLength):null;
+  const cycleDayStr=cycleInfo?` · Cycle day ${cycleInfo.day}`:'';
+  document.getElementById('phaseBadge').textContent=phase+(state.phaseOverride?' ✎':' ✎');
+  document.getElementById('workoutSub').textContent=PHASE_WORKOUT[phase];
   const d=new Date(state.startDate);d.setDate(d.getDate()+day-1);
-  document.getElementById('dateDisplay').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('dateDisplay').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'})+cycleDayStr;
   document.getElementById('dayBarFill').style.width=((day/75)*100)+'%';
   renderStreak();loadDayChecks(day);loadDayCycleLog(day);
 }
@@ -383,9 +444,45 @@ function saveNotes(){
 }
 
 function completeDay(){
+  const phase=getCurrentPhase();
   if(!state.completedDays.includes(state.currentDay))state.completedDays.push(state.currentDay);
-  document.getElementById('completeMsg').textContent=COMPLETE_MSGS[state.phase]||'One day stronger.';
+  document.getElementById('completeMsg').textContent=COMPLETE_MSGS[phase]||'One day stronger.';
   document.getElementById('completeOverlay').classList.add('show');save();
+}
+
+function showPhaseModal(){
+  document.getElementById('modalLastPeriod').value=state.lastPeriodDate||'';
+  document.getElementById('modalCycleLength').value=state.cycleLength||28;
+  document.getElementById('modalPeriodLength').value=state.periodLength||5;
+  modalPhaseOverride=state.phaseOverride||null;
+  document.querySelectorAll('#modalPhaseOptions .phase-option').forEach(o=>{
+    o.classList.toggle('selected',o.querySelector('.phase-name').textContent===modalPhaseOverride);
+  });
+  document.getElementById('phaseModal').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+
+function hidePhaseModal(){
+  document.getElementById('phaseModal').classList.remove('show');
+  document.body.style.overflow='';
+  modalPhaseOverride=null;
+}
+
+function selectModalPhase(el,phase){
+  document.querySelectorAll('#modalPhaseOptions .phase-option').forEach(o=>o.classList.remove('selected'));
+  if(modalPhaseOverride===phase){modalPhaseOverride=null;}
+  else{el.classList.add('selected');modalPhaseOverride=phase;}
+}
+
+function savePhaseModal(){
+  const lp=document.getElementById('modalLastPeriod').value;
+  const cl=parseInt(document.getElementById('modalCycleLength').value)||28;
+  const pl=parseInt(document.getElementById('modalPeriodLength').value)||5;
+  if(lp) state.lastPeriodDate=lp;
+  state.cycleLength=cl;
+  state.periodLength=pl;
+  state.phaseOverride=modalPhaseOverride;
+  save();hidePhaseModal();renderTracker();
 }
 
 function nextDay(){
