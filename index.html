@@ -289,19 +289,22 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-
     <button class="btn-primary" style="width:100%;" onclick="savePhaseModal()">Update</button>
   </div>
 </div>
+
+<div class="overlay" id="infoDrawer" style="flex-direction:column;">
   <div class="drawer-backdrop" onclick="hideInfo()"></div>
   <div class="drawer-sheet">
-    <div class="drawer-handle"></div>
+    <div class="drawer-handle" onclick="hideInfo()" style="cursor:pointer;"></div>
     <div class="drawer-top">
       <h3>The 6 Rules</h3>
       <button class="drawer-close" onclick="hideInfo()">✕</button>
     </div>
-    <div class="info-rule"><div class="info-rule-title">Movement <span style="color:var(--clay);font-size:12px;">Phase-adapted</span></div><div class="info-rule-body">One structured workout (45–60 min) + daily outdoor walk. Max 3 HIIT sessions per week. During luteal: reduce intensity, favour strength or yoga.</div></div>
+    <div class="info-rule"><div class="info-rule-title">Movement <span style="color:var(--accent);font-size:12px;">Phase-adapted</span></div><div class="info-rule-body">One structured workout (45–60 min) + daily outdoor walk. Max 3 HIIT sessions per week. During luteal: reduce intensity, favour strength or yoga.</div></div>
     <div class="info-rule"><div class="info-rule-title">Eat to nourish</div><div class="info-rule-body">3 meals, no skipping. Prioritise protein (1.6–2g/kg), healthy fats, complex carbs. No calorie deficit. No alcohol for 75 days.</div></div>
     <div class="info-rule"><div class="info-rule-title">3 litres of water</div><div class="info-rule-body">Herbal teas count. Limit caffeine to 1 cup before noon. Add electrolytes if training hard.</div></div>
     <div class="info-rule"><div class="info-rule-title">Read 10 pages</div><div class="info-rule-body">Real book only. No screens 30 min before bed — cortisol and melatonin are linked.</div></div>
-    <div class="info-rule"><div class="info-rule-title">Stress practice <span style="color:var(--clay);font-size:12px;">Cortisol-critical</span></div><div class="info-rule-body">10 min daily: breathwork, meditation, or journaling. 7–9 hours sleep. Cold exposure optional — follicular phase only.</div></div>
-    <div class="info-rule"><div class="info-rule-title">Track your cycle <span style="color:var(--moss);font-size:12px;">The key one</span></div><div class="info-rule-body">Log energy, mood, discharge, and symptoms daily. Adjust training by phase. Note any cycle length changes — they're data.</div></div>
+    <div class="info-rule"><div class="info-rule-title">Stress practice <span style="color:var(--accent);font-size:12px;">Cortisol-critical</span></div><div class="info-rule-body">10 min daily: breathwork, meditation, or journaling. 7–9 hours sleep. Cold exposure optional — follicular phase only.</div></div>
+    <div class="info-rule"><div class="info-rule-title">Track your cycle <span style="color:var(--purple);font-size:12px;">The key one</span></div><div class="info-rule-body">Log energy, mood, discharge, and symptoms daily. Adjust training by phase. Note any cycle length changes — they're data.</div></div>
+    <button class="btn-primary" style="width:100%;margin-top:24px;" onclick="hideInfo()">Close</button>
   </div>
 </div>
 
